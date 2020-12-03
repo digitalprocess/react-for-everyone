@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Filter from '../Filter'
 import Movie from './Movie'
+import { device } from '../device'
 
 const MOVIE_API_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
-const MOVIE_CONFIG_URL = `https://api.themoviedb.org/3/configuration?api_key=${process.env.REACT_APP_API_KEY}
-`
+const MOVIE_CONFIG_URL = `https://api.themoviedb.org/3/configuration?api_key=${process.env.REACT_APP_API_KEY}`
 
 export default function MoviesList() {
 	const [filter, setFilter] = useState('')
@@ -52,11 +52,14 @@ export default function MoviesList() {
 
 const MoviesListStyles = styled.ul`
 	list-style: none;
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
 	gap: 1rem;
 	margin: 0;
 	padding: 1rem;
+	@media ${device.tablet} {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+	}
+
 	img {
 		width: 100%;
 		box-shadow: 1px 1px 10px rgba( 0, 0, 0, 0.4)

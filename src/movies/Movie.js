@@ -6,7 +6,7 @@ export default function Movie({ movie, config: { images } }) {
 		<li>
 			{images &&
 				<img
-					src={images.base_url + images.poster_sizes[3]  + movie.poster_path}
+					src={images.base_url + images.poster_sizes[3] + movie.poster_path}
 					alt={movie.title + ' Poster'}
 				/>
 			}

@@ -57,6 +57,10 @@ export default function MovieDetail() {
 
 				<div>
 					<h1>{movie.title}</h1>
+					<div className="subtitle">
+						<h2>{movie.tagline}</h2>
+						<h3>{new Date(movie.release_date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</h3>
+					</div>
 					<p>{movie.overview}</p>
 					<ul>
 						{movie.genres.map(genre => (
@@ -96,6 +100,12 @@ const MovieDetailStyles = styled.div`
 			@media ${device.tablet} {
 				margin-top: -160px;
 			}
+		}
+	}
+	.subtitle {
+		@media ${device.mobileL} {
+			display: flex;
+			justify-content: space-between;
 		}
 	}
 `

@@ -4,8 +4,8 @@ import Filter from '../Filter'
 import Movie from './Movie'
 import { device } from '../device'
 
-const MOVIE_API_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
-const MOVIE_CONFIG_URL = `https://api.themoviedb.org/3/configuration?api_key=${process.env.REACT_APP_API_KEY}`
+const MOVIE_API_URL = `${process.env.REACT_APP_API_URL}/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
+const MOVIE_CONFIG_URL = `${process.env.REACT_APP_API_URL}/configuration?api_key=${process.env.REACT_APP_API_KEY}`
 
 export default function MoviesList() {
 	const [filter, setFilter] = useState('')

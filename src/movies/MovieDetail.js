@@ -43,11 +43,6 @@ export default function MovieDetail() {
 
 	return (
 		<MovieDetailStyles backdrop={images.base_url + images.backdrop_sizes[3] + movie.backdrop_path}>
-			{/* <img
-				className="backdrop"
-				src={images.base_url + images.backdrop_sizes[3] + movie.backdrop_path}
-				alt={movie.title + 'Backdrop'}
-			/> */}
 			<div className="details">
 				<img
 					className="poster"
@@ -55,13 +50,15 @@ export default function MovieDetail() {
 					alt={movie.title + ' Poster'}
 				/>
 
-				<div>
+				<div className="description">
 					<h1>{movie.title}</h1>
 					<div className="subtitle">
-						<h2>{movie.tagline}</h2>
-						<h3>{new Date(movie.release_date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</h3>
+						{movie.tagline &&
+							<h2>"{movie.tagline}"</h2>
+						}
+						<p>{new Date(movie.release_date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</p>
 					</div>
-					<p>{movie.overview}</p>
+					<p className="overview">{movie.overview}</p>
 					<ul>
 						{movie.genres.map(genre => (
 							<li key={genre.id}>{genre.name}</li>
@@ -88,6 +85,7 @@ const MovieDetailStyles = styled.div`
 		gap: 1rem;
 		@media ${device.tablet} {
 			display: flex;
+			/* max-width: 700px; */
 		}
 		h1 {
 			text-align: center;
@@ -100,12 +98,21 @@ const MovieDetailStyles = styled.div`
 			@media ${device.tablet} {
 				margin-top: -160px;
 			}
+			@media ${device.laptopL} {
+				margin: -160px 2rem auto 160px;
+			}
 		}
 	}
 	.subtitle {
 		@media ${device.mobileL} {
 			display: flex;
 			justify-content: space-between;
+		}
+	}
+
+	.overview {
+		@media ${device.tablet} {
+			max-width: 700px;
 		}
 	}
 `

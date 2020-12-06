@@ -52,12 +52,26 @@ export default function MoviesList() {
 
 const MoviesListStyles = styled.ul`
 	list-style: none;
-	gap: 1rem;
 	margin: 0;
 	padding: 1rem;
+	display: grid;
+	gap: 1rem;
+	justify-content: center;
+
+	@media ${device.mobileL} {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
 	@media ${device.tablet} {
-		display: grid;
 		grid-template-columns: repeat(4, 1fr);
+	}
+
+	@media ${device.laptop} {
+		grid-template-columns: repeat(5, 1fr);
+	}
+
+	@media ${device.laptopL} {
+		grid-template-columns: repeat(7, 1fr);
 	}
 
 	img {

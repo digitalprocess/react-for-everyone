@@ -7,6 +7,12 @@ const BASE_URL = `${process.env.REACT_APP_API_URL}/movie/`
 const API_KEY = `?api_key=${process.env.REACT_APP_API_KEY}`
 const MOVIE_CONFIG_URL = `${process.env.REACT_APP_API_URL}/configuration?api_key=${process.env.REACT_APP_API_KEY}`
 
+function formatRuntime(runtime) {
+	const hours = Math.floor(runtime / 60)
+	const minutes = runtime % 60
+	return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`
+}
+
 export default function MovieDetail() {
 	const { id } = useParams()
 	const [movie, setMovie] = useState({})
@@ -36,6 +42,7 @@ export default function MovieDetail() {
 		getConfig()
 	}, [id])
 
+	useEffect(() => { document.title = movie.title || '' })
 	if (!movie.title) return null
 
 	const images = config.images
@@ -52,18 +59,30 @@ export default function MovieDetail() {
 
 				<div className="description">
 					<h1>{movie.title}</h1>
-					<div className="subtitle">
-						{movie.tagline &&
-							<h2>"{movie.tagline}"</h2>
+					{movie.tagline &&
+						<h2><em>"{movie.tagline}"</em></h2>
+					}
+					<small>
+						{!!movie.runtime &&
+							<span>{formatRuntime(movie.runtime)}</span>
 						}
-						<p>{new Date(movie.release_date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</p>
-					</div>
+						<span>{movie.genres[0].name}</span>
+						<span>{new Date(movie.release_date).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+						<span>{movie.vote_average}/10</span>
+					</small>
 					<p className="overview">{movie.overview}</p>
-					<ul>
-						{movie.genres.map(genre => (
-							<li key={genre.id}>{genre.name}</li>
+					<div className="production-companies">
+						{movie.production_companies.map(company => (
+							company.logo_path &&
+							<span key={company.id}>
+								<img
+									alt={company.name}
+									title={company.name}
+									src={images.base_url + images.logo_sizes[1] + company.logo_path}
+								/>
+							</span>
 						))}
-					</ul>
+					</div>
 				</div>
 			</div>
 		</MovieDetailStyles>
@@ -75,6 +94,7 @@ const MovieDetailStyles = styled.div`
 	background-size: cover;
 	@media ${device.tablet} {
 		background: url(${props => props.backdrop}) no-repeat center;
+		background-size: cover;
 		padding-top: 50vh;
 	}
 	.details {
@@ -85,31 +105,42 @@ const MovieDetailStyles = styled.div`
 		gap: 1rem;
 		@media ${device.tablet} {
 			display: flex;
-			/* max-width: 700px; */
 		}
-		h1 {
+		h1, h2 {
 			text-align: center;
 		}
-		img {
-			max-width: 100%;
+		small {
+			display: flex;
+			justify-content: space-evenly;
+		}
+		.poster {
+			max-width: 50%;
 			box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 			display: block;
 			margin: auto;
 			@media ${device.tablet} {
+				max-width: 100%;
 				margin-top: -160px;
 			}
 			@media ${device.laptopL} {
 				margin: -160px 2rem auto 160px;
 			}
 		}
+
 	}
-	.subtitle {
+	.production-companies {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-evenly;
+		align-items: center;
+		gap: 1rem;
 		@media ${device.mobileL} {
-			display: flex;
-			justify-content: space-between;
+			flex-direction: row;
+		}
+		img {
+			max-width: 100%;
 		}
 	}
-
 	.overview {
 		@media ${device.tablet} {
 			max-width: 700px;

@@ -35,6 +35,7 @@ export default function MoviesList() {
 	useEffect(() => {
 		getMovies()
 		getConfig()
+		document.title = 'Discover Movies'
 	}, [])
 
 	return (

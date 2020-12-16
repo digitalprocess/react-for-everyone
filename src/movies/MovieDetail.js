@@ -113,6 +113,7 @@ const MovieDetailStyles = styled.div`
 		padding: 1rem;
 		@media ${device.tablet} {
 			display: flex;
+			justify-content: center;
 		}
 		h1, h2 {
 			text-align: center;

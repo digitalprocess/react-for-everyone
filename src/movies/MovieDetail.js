@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { device } from '../device'
 
@@ -51,12 +51,15 @@ export default function MovieDetail() {
 	return (
 		<MovieDetailStyles backdrop={images.base_url + images.backdrop_sizes[3] + movie.backdrop_path}>
 			<div className="details">
-				<div className="poster">
+				<div className="">
 					<img
-						className=""
+						className="poster"
 						src={images.base_url + images.poster_sizes[3] + movie.poster_path}
 						alt={movie.title + ' Poster'}
 					/>
+					<div className="back-button">
+						<Link to="/" className="button">Back to movies</Link>
+					</div>
 				</div>
 
 				<div className="description">
@@ -116,16 +119,15 @@ const MovieDetailStyles = styled.div`
 			justify-content: space-evenly;
 		}
 		.poster {
-			img {
-				max-width: 50%;
-				box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-				display: block;
-				margin: auto;
-				@media ${device.tablet} {
-					max-width: 100%;
-					margin-top: -160px;
-				}
+			max-width: 50%;
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+			display: block;
+			margin: auto;
+			@media ${device.tablet} {
+				max-width: 100%;
+				margin-top: -160px;
 			}
+
 			@media ${device.laptopL} {
 				margin: -160px 2rem auto 160px;
 			}
@@ -154,6 +156,33 @@ const MovieDetailStyles = styled.div`
 	.overview {
 		@media ${device.tablet} {
 			max-width: 700px;
+		}
+	}
+	.back-button {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		margin: 2rem 0;
+		a {
+			text-transform: uppercase;
+			font-weight: bold;
+			padding: 15px 32px;
+			text-align: center;
+			transition-duration: 0.4s;
+			text-decoration: none;
+			font-size: 16px;
+			cursor: pointer;
+			border: 2px solid #008CBA;
+			border-radius: 3px;
+			background-color: #008CBA;
+			color: white;
+			@media ${device.laptop} {
+				&:hover {
+					background-color: white;
+					color: #008CBA;
+					border: 2px solid #008CBA;
+				}
+			}
 		}
 	}
 `

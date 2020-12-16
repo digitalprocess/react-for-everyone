@@ -51,11 +51,13 @@ export default function MovieDetail() {
 	return (
 		<MovieDetailStyles backdrop={images.base_url + images.backdrop_sizes[3] + movie.backdrop_path}>
 			<div className="details">
-				<img
-					className="poster"
-					src={images.base_url + images.poster_sizes[3] + movie.poster_path}
-					alt={movie.title + ' Poster'}
-				/>
+				<div className="poster">
+					<img
+						className=""
+						src={images.base_url + images.poster_sizes[3] + movie.poster_path}
+						alt={movie.title + ' Poster'}
+					/>
+				</div>
 
 				<div className="description">
 					<h1>{movie.title}</h1>
@@ -102,7 +104,7 @@ const MovieDetailStyles = styled.div`
 		background: white;
 		color: #333;
 		padding: 1rem;
-		gap: 1rem;
+		/* gap: 1rem; */
 		@media ${device.tablet} {
 			display: flex;
 		}
@@ -114,13 +116,15 @@ const MovieDetailStyles = styled.div`
 			justify-content: space-evenly;
 		}
 		.poster {
-			max-width: 50%;
-			box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-			display: block;
-			margin: auto;
-			@media ${device.tablet} {
-				max-width: 100%;
-				margin-top: -160px;
+			img {
+				max-width: 50%;
+				box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+				display: block;
+				margin: auto;
+				@media ${device.tablet} {
+					max-width: 100%;
+					margin-top: -160px;
+				}
 			}
 			@media ${device.laptopL} {
 				margin: -160px 2rem auto 160px;
@@ -128,16 +132,22 @@ const MovieDetailStyles = styled.div`
 		}
 
 	}
+	.description {
+		@media ${device.tablet} {
+			padding: 1rem;
+		}
+	}
 	.production-companies {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-evenly;
 		align-items: center;
-		gap: 1rem;
+		flex-wrap: wrap;
 		@media ${device.mobileL} {
 			flex-direction: row;
 		}
 		img {
+			padding: 1rem;
 			max-width: 100%;
 		}
 	}

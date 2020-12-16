@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { device } from '../device'
+import { device } from '../viewport'
 
 const BASE_URL = `${process.env.REACT_APP_API_URL}/movie/`
 const API_KEY = `?api_key=${process.env.REACT_APP_API_KEY}`
@@ -49,7 +49,13 @@ export default function MovieDetail() {
 	if (!config.images) return null
 
 	return (
-		<MovieDetailStyles backdrop={images.base_url + images.backdrop_sizes[3] + movie.backdrop_path}>
+		<MovieDetailStyles
+			backdrop={
+				images.base_url +
+				images.backdrop_sizes[3] +
+				movie.backdrop_path
+			}
+		>
 			<div className="details">
 				<div className="">
 					<img
@@ -57,9 +63,6 @@ export default function MovieDetail() {
 						src={images.base_url + images.poster_sizes[3] + movie.poster_path}
 						alt={movie.title + ' Poster'}
 					/>
-					<div className="back-button">
-						<Link to="/" className="button">Back to movies</Link>
-					</div>
 				</div>
 
 				<div className="description">
@@ -88,6 +91,9 @@ export default function MovieDetail() {
 							</span>
 						))}
 					</div>
+					<div className="back-button">
+						<Link to="/" className="button">Back to movies</Link>
+					</div>
 				</div>
 			</div>
 		</MovieDetailStyles>
@@ -96,10 +102,8 @@ export default function MovieDetail() {
 
 const MovieDetailStyles = styled.div`
 	position: relative;
-	background-size: cover;
 	@media ${device.tablet} {
-		background: url(${props => props.backdrop}) no-repeat center;
-		background-size: cover;
+		background: url(${props => props.backdrop}) center/cover no-repeat;
 		padding-top: 50vh;
 	}
 	.details {
@@ -107,7 +111,6 @@ const MovieDetailStyles = styled.div`
 		background: white;
 		color: #333;
 		padding: 1rem;
-		/* gap: 1rem; */
 		@media ${device.tablet} {
 			display: flex;
 		}
@@ -118,21 +121,19 @@ const MovieDetailStyles = styled.div`
 			display: flex;
 			justify-content: space-evenly;
 		}
-		.poster {
-			max-width: 50%;
-			box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
-			display: block;
-			margin: auto;
-			@media ${device.tablet} {
-				max-width: 100%;
-				margin-top: -160px;
-			}
-
-			@media ${device.laptopL} {
-				margin: -160px 2rem auto 160px;
-			}
+	}
+	.poster {
+		max-width: 50%;
+		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+		display: block;
+		margin: auto;
+		@media ${device.tablet} {
+			max-width: 100%;
+			margin-top: -160px;
 		}
-
+		@media ${device.laptopL} {
+			margin: -160px 2rem auto 160px;
+		}
 	}
 	.description {
 		@media ${device.tablet} {
@@ -164,24 +165,22 @@ const MovieDetailStyles = styled.div`
 		align-items: stretch;
 		margin: 2rem 0;
 		a {
-			text-transform: uppercase;
+			color: white;
+			cursor: pointer;
+			font-size: 16px;
 			font-weight: bold;
 			padding: 15px 32px;
-			text-align: center;
-			transition-duration: 0.4s;
-			text-decoration: none;
-			font-size: 16px;
-			cursor: pointer;
-			border: 2px solid #008CBA;
 			border-radius: 3px;
+			text-align: center;
+			text-decoration: none;
+			transition-duration: 0.4s;
+			border: 2px solid #008CBA;
+			text-transform: uppercase;
 			background-color: #008CBA;
-			color: white;
-			@media ${device.laptop} {
-				&:hover {
-					background-color: white;
-					color: #008CBA;
-					border: 2px solid #008CBA;
-				}
+			&:hover {
+				color: #008CBA;
+				background-color: white;
+				border: 2px solid #008CBA;
 			}
 		}
 	}

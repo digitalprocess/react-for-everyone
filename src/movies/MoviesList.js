@@ -39,15 +39,17 @@ export default function MoviesList() {
 	}, [])
 
 	return (
-		<div>
-			<Filter filter={filter} setFilter={setFilter} />
+		<MoviesListWrapper>
+			<div className="filter-wrapper">
+				<Filter filter={filter} setFilter={setFilter} />
+			</div>
 			<MoviesListStyles>
 				{movies
 					.filter(movie => movie.title.toLowerCase().includes(filter.toLocaleLowerCase()))
 					.map(movie => <Movie key={movie.id} config={config} movie={movie} />)
 				}
 			</MoviesListStyles>
-		</div>
+		</MoviesListWrapper>
 	)
 }
 
@@ -78,5 +80,25 @@ const MoviesListStyles = styled.ul`
 	img {
 		width: 100%;
 		box-shadow: 1px 1px 10px rgba( 0, 0, 0, 0.4)
+	}
+`
+const MoviesListWrapper = styled.div`
+	position: relative;
+	padding-top: 3rem;
+	.filter-wrapper {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		padding: 0.9rem;
+		background: rgba(0, 0, 0, 0.7);
+	}
+	input {
+		display: block;
+		width: calc(100% - 0.9rem);
+		margin: auto;
+		@media ${device.tablet} {
+			width: auto;
+		}
 	}
 `

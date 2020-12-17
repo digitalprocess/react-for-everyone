@@ -13,12 +13,10 @@ export default function MoviesList() {
 	const [movies, setMovies] = useState([])
 	const [config, setConfig] = useState({})
 	const { page = 1 } = useParams()
-	console.log(page)
 
 	const getMovies = async (p = 1) => {
 		try {
 			const res = await fetch(MOVIE_API_URL + p)
-			console.log(res)
 			const movies = await res.json()
 			setMovies(movies.results)
 		} catch (error) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { device } from '../viewport'
 
@@ -11,6 +11,11 @@ function formatRuntime(runtime) {
 	const hours = Math.floor(runtime / 60)
 	const minutes = runtime % 60
 	return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`
+}
+
+function goBack(e) {
+	e.preventDefault()
+	window.history.back()
 }
 
 export default function MovieDetail() {
@@ -92,7 +97,7 @@ export default function MovieDetail() {
 						))}
 					</div>
 					<div className="back-button">
-						<Link to="/" className="button">Back to movies</Link>
+						<button onClick={goBack} className="button">Back to movies</button>
 					</div>
 				</div>
 			</div>
@@ -165,7 +170,7 @@ const MovieDetailStyles = styled.div`
 		justify-content: center;
 		align-items: stretch;
 		margin: 2rem 0;
-		a {
+		button {
 			color: white;
 			cursor: pointer;
 			font-size: 16px;

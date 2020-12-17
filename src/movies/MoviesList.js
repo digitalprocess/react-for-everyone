@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Filter from '../Filter'
 import Movie from './Movie'
@@ -11,11 +12,13 @@ export default function MoviesList() {
 	const [filter, setFilter] = useState('')
 	const [movies, setMovies] = useState([])
 	const [config, setConfig] = useState({})
-	const [currentPage, setCurrentPage] = useState(1)
+	const { page = 1 } = useParams()
+	console.log(page)
 
-	const getMovies = async (page) => {
+	const getMovies = async (p = 1) => {
 		try {
-			const res = await fetch(MOVIE_API_URL + page)
+			const res = await fetch(MOVIE_API_URL + p)
+			console.log(res)
 			const movies = await res.json()
 			setMovies(movies.results)
 		} catch (error) {
@@ -34,28 +37,31 @@ export default function MoviesList() {
 	}
 
 	useEffect(() => {
-		getMovies(currentPage)
+		getMovies(page)
 		getConfig()
-	}, [currentPage])
+	}, [page])
 
 	return (
 		<MoviesListWrapper>
 			<div className="filter-wrapper">
-				<button
-					onClick={() => setCurrentPage(currentPage - 1)}
-					disabled={currentPage === 1}
+				<Link
+					to={`/${parseInt(page) - 1}`}
+					disabled={parseInt(page) === 1 || page === undefined}
 				>
 					Prev
-				</button>
+				</Link>
 
-				<Filter filter={filter} setFilter={setFilter} />
+				<Filter
+					filter={filter}
+					setFilter={setFilter}
+				/>
 
-				<button
-					onClick={() => setCurrentPage(currentPage + 1)}
-					disabled={currentPage === 10}
+				<Link
+					to={`/${parseInt(page) + 1}`}
+					disabled={parseInt(page) > 500}
 				>
 					Next
-				</button>
+				</Link>
 			</div>
 			<MoviesListStyles>
 				{movies
@@ -108,6 +114,7 @@ const MoviesListWrapper = styled.div`
 		background: rgba(0, 0, 0, 0.7);
 		display: flex;
 		justify-content: center;
+		align-items: center;
 	}
 	input {
 		display: block;
@@ -118,10 +125,15 @@ const MoviesListWrapper = styled.div`
 			width: auto;
 		}
 	}
-	button{
-		cursor: pointer;
-		&:disabled {
-			cursor: not-allowed;
+	a {
+		color: white;
+		text-decoration: none;
+		text-transform: uppercase;
+		font-weight: bold;
+
+		&[disabled] {
+			pointer-events: none;
+			color: grey;
 		}
 	}
 `

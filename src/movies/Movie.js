@@ -6,11 +6,13 @@ export default function Movie({ movie, config: { images } }) {
 	return (
 		<li>
 			<Link to={`/movie/${movie.id}`}>
-				{images &&
+				{images && movie.poster_path ?
 					<img
-					src={images.base_url + images.poster_sizes[3] + movie.poster_path}
-					alt={movie.title + ' Poster'}
+						src={images.base_url + images.poster_sizes[3] + movie.poster_path}
+						alt={movie.title + ' Poster'}
 					/>
+					:
+					<h3>{movie.title}</h3>
 				}
 			</Link>
 		</li>

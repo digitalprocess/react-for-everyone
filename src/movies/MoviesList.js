@@ -35,7 +35,9 @@ export default function MoviesList() {
 	}
 
 	useEffect(() => {
-		getMovies(page)
+		if (page >= 1 && page <= 500) {
+			getMovies(page)
+		}
 		getConfig()
 	}, [page])
 
@@ -44,7 +46,7 @@ export default function MoviesList() {
 			<div className="filter-wrapper">
 				<Link
 					to={`/${parseInt(page) - 1}`}
-					disabled={parseInt(page) === 1 || page === undefined}
+					disabled={parseInt(page) <= 1 || page === undefined}
 				>
 					Prev
 				</Link>
@@ -61,6 +63,7 @@ export default function MoviesList() {
 					Next
 				</Link>
 			</div>
+
 			<MoviesListStyles>
 				{movies
 					.filter(movie => movie.title.toLowerCase().includes(filter.toLocaleLowerCase()))

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { device } from '../viewport'
 
@@ -13,13 +13,9 @@ function formatRuntime(runtime) {
 	return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`
 }
 
-function goBack(e) {
-	e.preventDefault()
-	window.history.back()
-}
-
 export default function MovieDetail() {
 	const { id } = useParams()
+	const { goBack } = useHistory()
 	const [movie, setMovie] = useState({})
 	const [config, setConfig] = useState({})
 
@@ -71,7 +67,9 @@ export default function MovieDetail() {
 				</div>
 
 				<div className="description">
-					<h1>{movie.title}</h1>
+					{movie.title &&
+						<h1>{movie.title}</h1>
+					}
 					{movie.tagline &&
 						<h2><em>"{movie.tagline}"</em></h2>
 					}
@@ -79,23 +77,51 @@ export default function MovieDetail() {
 						{!!movie.runtime &&
 							<span>{formatRuntime(movie.runtime)}</span>
 						}
-						<span>{movie.genres[0].name}</span>
-						<span>{new Date(movie.release_date).toLocaleDateString('en-US', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-						<span>{movie.vote_average}/10</span>
-					</small>
-					<p className="overview">{movie.overview}</p>
-					<div className="production-companies">
-						{movie.production_companies.map(company => (
-							company.logo_path &&
-							<span key={company.id}>
-								<img
-									alt={company.name}
-									title={company.name}
-									src={images.base_url + images.logo_sizes[1] + company.logo_path}
-								/>
+
+						{!!movie.genres.length &&
+							<span>{movie.genres[0].name}</span>
+						}
+
+						{movie.release_date &&
+							<span>
+								{new Date(movie.release_date)
+									.toLocaleDateString('en-US', {
+										timeZone: 'UTC',
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric'
+									})}
 							</span>
-						))}
-					</div>
+						}
+
+						{movie.original_language &&
+							<span>{movie.original_language.toUpperCase()}</span>
+						}
+
+						{!!movie.vote_average &&
+							<span>{movie.vote_average}/10</span>
+						}
+					</small>
+
+					{movie.overview &&
+						<p className="overview">{movie.overview}</p>
+					}
+
+					{!!movie.production_companies.length &&
+						<div className="production-companies">
+							{movie.production_companies.map(company => (
+								company.logo_path &&
+								<span key={company.id}>
+									<img
+										alt={company.name}
+										title={company.name}
+										src={images.base_url + images.logo_sizes[1] + company.logo_path}
+									/>
+								</span>
+							))}
+						</div>
+					}
+
 					<div className="back-button">
 						<button onClick={goBack} className="button">Back to movies</button>
 					</div>
@@ -126,6 +152,10 @@ const MovieDetailStyles = styled.div`
 		small {
 			display: flex;
 			justify-content: space-evenly;
+			flex-wrap: wrap;
+			span {
+				margin: 0.5rem;
+			}
 		}
 	}
 	.poster {
@@ -171,7 +201,7 @@ const MovieDetailStyles = styled.div`
 		align-items: stretch;
 		margin: 2rem 0;
 		button {
-			color: white;
+			color: #333;
 			cursor: pointer;
 			font-size: 16px;
 			font-weight: bold;
@@ -180,13 +210,13 @@ const MovieDetailStyles = styled.div`
 			text-align: center;
 			text-decoration: none;
 			transition-duration: 0.4s;
-			border: 2px solid #008CBA;
+			border: 2px solid #333;
 			text-transform: uppercase;
-			background-color: #008CBA;
+			background-color: white;
 			&:hover {
-				color: #008CBA;
-				background-color: white;
-				border: 2px solid #008CBA;
+				color: white;
+				background-color: #333;
+				border: 2px solid #333;
 			}
 		}
 	}

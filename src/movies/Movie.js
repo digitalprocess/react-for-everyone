@@ -21,7 +21,7 @@ Movie.propTypes = {
 	movie: PropTypes.shape({
 		id: PropTypes.number.isRequired,
 		title: PropTypes.string.isRequired,
-		poster_path: PropTypes.string.isRequired,
+		poster_path: PropTypes.string,
 	}),
 	config: PropTypes.shape({
 		images: PropTypes.shape({

@@ -56,7 +56,7 @@ export default function MoviesList() {
 
 				<Link
 					to={`/${parseInt(page) + 1}`}
-					disabled={parseInt(page) > 500}
+					disabled={parseInt(page) >= 500}
 				>
 					Next
 				</Link>

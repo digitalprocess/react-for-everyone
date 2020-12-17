@@ -4,17 +4,18 @@ import Filter from '../Filter'
 import Movie from './Movie'
 import { device } from '../viewport'
 
-const MOVIE_API_URL = `${process.env.REACT_APP_API_URL}/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1`
+const MOVIE_API_URL = `${process.env.REACT_APP_API_URL}/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=`
 const MOVIE_CONFIG_URL = `${process.env.REACT_APP_API_URL}/configuration?api_key=${process.env.REACT_APP_API_KEY}`
 
 export default function MoviesList() {
 	const [filter, setFilter] = useState('')
 	const [movies, setMovies] = useState([])
 	const [config, setConfig] = useState({})
+	const [currentPage, setCurrentPage] = useState(1)
 
-	const getMovies = async () => {
+	const getMovies = async (page) => {
 		try {
-			const res = await fetch(MOVIE_API_URL)
+			const res = await fetch(MOVIE_API_URL + page)
 			const movies = await res.json()
 			setMovies(movies.results)
 		} catch (error) {
@@ -33,15 +34,28 @@ export default function MoviesList() {
 	}
 
 	useEffect(() => {
-		getMovies()
+		getMovies(currentPage)
 		getConfig()
-		document.title = 'Discover Movies'
-	}, [])
+	}, [currentPage])
 
 	return (
 		<MoviesListWrapper>
 			<div className="filter-wrapper">
+				<button
+					onClick={() => setCurrentPage(currentPage - 1)}
+					disabled={currentPage === 1}
+				>
+					Prev
+				</button>
+
 				<Filter filter={filter} setFilter={setFilter} />
+
+				<button
+					onClick={() => setCurrentPage(currentPage + 1)}
+					disabled={currentPage === 10}
+				>
+					Next
+				</button>
 			</div>
 			<MoviesListStyles>
 				{movies
@@ -92,13 +106,22 @@ const MoviesListWrapper = styled.div`
 		right: 0;
 		padding: 0.9rem;
 		background: rgba(0, 0, 0, 0.7);
+		display: flex;
+		justify-content: center;
 	}
 	input {
 		display: block;
 		width: calc(100% - 0.9rem);
-		margin: auto;
+		margin: auto 1rem;
 		@media ${device.tablet} {
+			display: inline;
 			width: auto;
+		}
+	}
+	button{
+		cursor: pointer;
+		&:disabled {
+			cursor: not-allowed;
 		}
 	}
 `

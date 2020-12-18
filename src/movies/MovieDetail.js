@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { device } from '../viewport'
+import { CTA } from '../Buttons'
 
 const BASE_URL = `${process.env.REACT_APP_API_URL}/movie/`
 const API_KEY = `?api_key=${process.env.REACT_APP_API_KEY}`
@@ -78,7 +79,7 @@ export default function MovieDetail() {
 							<span>{formatRuntime(movie.runtime)}</span>
 						}
 
-						{!!movie.genres.length &&
+						{!!movie.genres.length && !!movie.genres.length &&
 							<span>{movie.genres[0].name}</span>
 						}
 
@@ -107,7 +108,15 @@ export default function MovieDetail() {
 						<p className="overview">{movie.overview}</p>
 					}
 
-					{!!movie.production_companies.length &&
+					{!!movie.production_countries && !!movie.production_countries.length &&
+						<ul className="production-countries">
+							{movie.production_countries.map((country, i) => (
+								<li key={i}>{country.name.replace(/(.{14})..+/, '$1')} </li>
+							))}
+						</ul>
+					}
+
+					{!!movie.production_companies && !!movie.production_companies.length &&
 						<div className="production-companies">
 							{movie.production_companies.map(company => (
 								company.logo_path &&
@@ -123,7 +132,12 @@ export default function MovieDetail() {
 					}
 
 					<div className="back-button">
-						<button onClick={goBack} className="button">Back to movies</button>
+						<CTA onClick={goBack} className="learn-more">
+							<span className="circle" aria-hidden="true">
+								<span className="icon arrow"></span>
+							</span>
+							<span className="button-text">Back to movies</span>
+						</CTA>
 					</div>
 				</div>
 			</div>
@@ -158,6 +172,7 @@ const MovieDetailStyles = styled.div`
 			}
 		}
 	}
+
 	.poster {
 		max-width: 50%;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -176,6 +191,16 @@ const MovieDetailStyles = styled.div`
 			padding: 1rem;
 		}
 	}
+	.production-countries {
+		list-style: none;
+		display: flex;
+		justify-content: flex-end;
+		padding: 0;
+		font-size: smaller;
+		li {
+			margin-left: 1rem;
+		}
+	}
 	.production-companies {
 		display: flex;
 		flex-direction: column;
@@ -192,7 +217,7 @@ const MovieDetailStyles = styled.div`
 	}
 	.overview {
 		@media ${device.tablet} {
-			max-width: 700px;
+			max-width: 800px;
 		}
 	}
 	.back-button {
@@ -200,24 +225,5 @@ const MovieDetailStyles = styled.div`
 		justify-content: center;
 		align-items: stretch;
 		margin: 2rem 0;
-		button {
-			color: #333;
-			cursor: pointer;
-			font-size: 16px;
-			font-weight: bold;
-			padding: 15px 32px;
-			border-radius: 3px;
-			text-align: center;
-			text-decoration: none;
-			transition-duration: 0.4s;
-			border: 2px solid #333;
-			text-transform: uppercase;
-			background-color: white;
-			&:hover {
-				color: white;
-				background-color: #333;
-				border: 2px solid #333;
-			}
-		}
 	}
 `

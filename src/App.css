@@ -24,13 +24,8 @@ p, ul {
 }
 
 input {
-	/* color: white; */
 	font-size: 1rem;
 	padding: 0.5rem;
 	border-radius: 5px;
 	border: 1px solid;
-	/* background-color: transparent; */
-	/* display: block; */
-	/* width: auto; */
-	/* margin: auto; */
 }

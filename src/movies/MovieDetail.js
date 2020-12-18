@@ -195,6 +195,7 @@ const MovieDetailStyles = styled.div`
 		list-style: none;
 		display: flex;
 		justify-content: flex-end;
+		flex-wrap: wrap;
 		padding: 0;
 		font-size: smaller;
 		li {

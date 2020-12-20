@@ -1,10 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+import { formatDate, isNotOutYet } from '../utils'
+
+const locale = 'en-US'
+const dateOptions = {
+	timeZone: 'UTC',
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+}
 
 export default function Movie({ movie, config: { images } }) {
+	// const today = new Date().getTime()
+	const releaseDate = new Date(movie.release_date)
+
 	return (
-		<li>
+		<MovieStyles>
 			<Link to={`/movie/${movie.id}`}>
 				{images && movie.poster_path ?
 					<img
@@ -14,8 +27,13 @@ export default function Movie({ movie, config: { images } }) {
 					:
 					<h3>{movie.title}</h3>
 				}
+				{isNotOutYet(releaseDate) &&
+					<h5 className="release-status">
+						Coming {formatDate(releaseDate, locale, dateOptions)}
+					</h5>
+				}
 			</Link>
-		</li>
+		</MovieStyles>
 	)
 }
 
@@ -33,3 +51,18 @@ Movie.propTypes = {
 		})
 	})
 }
+
+const MovieStyles = styled.li`
+	position: relative;
+	.release-status {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		color: #d12028;
+		background: #fff;
+		border-color: #d12028;
+		transform: rotate(-10deg);
+		width: 100%;
+		text-align: center;
+	}
+`

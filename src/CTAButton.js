@@ -1,6 +1,18 @@
+import React from 'react'
 import styled from 'styled-components'
 
-export const CTA = styled.button`
+export default function CTAButton({ text, children, onClick }) {
+	return (
+		<CTAStyles onClick={onClick} className="CTAButton">
+			<span className="circle" aria-hidden="true">
+				<span className="icon arrow"></span>
+			</span>
+			<span className="button-text">{text || children}</span>
+		</CTAStyles>
+	)
+}
+
+export const CTAStyles = styled.button`
 	cursor: pointer;
 	position: relative;
 	display: inline-block;
@@ -14,6 +26,10 @@ export const CTA = styled.button`
 	font-family: inherit;
 	width: 12rem;
 	height: auto;
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
 	.circle {
 		transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
 		position: relative;
@@ -74,25 +90,5 @@ export const CTA = styled.button`
 	}
 	&:hover .button-text {
 		color: #fff;
-	}
-`
-
-export const Button = styled.button `
-	color: #333;
-	cursor: pointer;
-	font-size: 16px;
-	font-weight: bold;
-	padding: 15px 32px;
-	border-radius: 3px;
-	text-align: center;
-	text-decoration: none;
-	transition-duration: 0.4s;
-	border: 2px solid #333;
-	text-transform: uppercase;
-	background-color: white;
-	&:hover {
-		color: white;
-		background-color: #333;
-		border: 2px solid #333;
 	}
 `

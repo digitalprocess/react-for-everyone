@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { device } from '../viewport'
-import { CTA } from '../Buttons'
+import CTAButton from '../CTAButton'
+import { formatDate, formatRuntime, isNotOutYet } from '../utils'
 
 const BASE_URL = `${process.env.REACT_APP_API_URL}/movie/`
 const API_KEY = `?api_key=${process.env.REACT_APP_API_KEY}`
 const MOVIE_CONFIG_URL = `${process.env.REACT_APP_API_URL}/configuration?api_key=${process.env.REACT_APP_API_KEY}`
 
-function formatRuntime(runtime) {
-	const hours = Math.floor(runtime / 60)
-	const minutes = runtime % 60
-	return `${hours > 0 ? hours + 'h' : ''} ${minutes > 0 ? minutes + 'm' : ''}`
+const locale = 'en-US'
+const dateOptions = {
+	timeZone: 'UTC',
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
 }
 
 export default function MovieDetail() {
@@ -50,6 +53,8 @@ export default function MovieDetail() {
 	const images = config.images
 	if (!config.images) return null
 
+	const releaseDate = new Date(movie.release_date)
+
 	return (
 		<MovieDetailStyles
 			backdrop={
@@ -59,12 +64,17 @@ export default function MovieDetail() {
 			}
 		>
 			<div className="details">
-				<div className="">
+				<div className="poster-wrapper">
 					<img
 						className="poster"
 						src={images.base_url + images.poster_sizes[3] + movie.poster_path}
 						alt={movie.title + ' Poster'}
 					/>
+					{isNotOutYet(releaseDate) &&
+						<h3 className="release-status">
+							Coming {formatDate(releaseDate, 'en-US', dateOptions)}
+						</h3>
+					}
 				</div>
 
 				<div className="description">
@@ -79,19 +89,13 @@ export default function MovieDetail() {
 							<span>{formatRuntime(movie.runtime)}</span>
 						}
 
-						{!!movie.genres.length && !!movie.genres.length &&
+						{!!movie.genres.length &&
 							<span>{movie.genres[0].name}</span>
 						}
 
 						{movie.release_date &&
 							<span>
-								{new Date(movie.release_date)
-									.toLocaleDateString('en-US', {
-										timeZone: 'UTC',
-										year: 'numeric',
-										month: 'long',
-										day: 'numeric'
-									})}
+							{formatDate(movie.release_date, locale, dateOptions)}
 							</span>
 						}
 
@@ -111,7 +115,9 @@ export default function MovieDetail() {
 					{!!movie.production_countries && !!movie.production_countries.length &&
 						<ul className="production-countries">
 							{movie.production_countries.map((country, i) => (
-								<li key={i}>{country.name.replace(/(.{14})..+/, '$1')} </li>
+								<li key={i}>
+									{country.name.replace(/(.{14})..+/, '$1')}
+								</li>
 							))}
 						</ul>
 					}
@@ -132,12 +138,7 @@ export default function MovieDetail() {
 					}
 
 					<div className="back-button">
-						<CTA onClick={goBack} className="learn-more">
-							<span className="circle" aria-hidden="true">
-								<span className="icon arrow"></span>
-							</span>
-							<span className="button-text">Back to movies</span>
-						</CTA>
+						<CTAButton onClick={goBack} text="Back to movies" />
 					</div>
 				</div>
 			</div>
@@ -226,5 +227,21 @@ const MovieDetailStyles = styled.div`
 		justify-content: center;
 		align-items: stretch;
 		margin: 2rem 0;
+	}
+	.poster-wrapper {
+		position: relative;
+		.release-status {
+			position: absolute;
+			top: 0;
+			left: 0;
+			color: #d12028;
+			background: #fff;
+			border-color: #d12028;
+			transform: rotate(-10deg);
+			width: 100%;
+			text-align: center;
+			padding: 0.5rem 0;
+			text-transform: uppercase;
+		}
 	}
 `

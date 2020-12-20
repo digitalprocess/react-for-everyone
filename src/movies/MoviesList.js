@@ -3,7 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Filter from '../Filter'
 import Movie from './Movie'
-import { device } from '../viewport'
+import { device, size } from '../viewport'
+import CTALink from '../CTALink'
 
 const MOVIE_API_URL = `${process.env.REACT_APP_API_URL}/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=`
 const MOVIE_CONFIG_URL = `${process.env.REACT_APP_API_URL}/configuration?api_key=${process.env.REACT_APP_API_KEY}`
@@ -41,12 +42,17 @@ export default function MoviesList() {
 		getConfig()
 	}, [page])
 
+	const prevPage = () => `/${parseInt(page) - 1}`
+	const nextPage = () => `/${parseInt(page) + 1}`
+	const noPrevPage = parseInt(page) <= 1 || page === undefined
+	const noNextPage = parseInt(page) >= 500
+
 	return (
 		<MoviesListWrapper>
 			<div className="filter-wrapper">
 				<Link
-					to={`/${parseInt(page) - 1}`}
-					disabled={parseInt(page) <= 1 || page === undefined}
+					to={prevPage}
+					disabled={noPrevPage}
 				>
 					Prev
 				</Link>
@@ -57,8 +63,8 @@ export default function MoviesList() {
 				/>
 
 				<Link
-					to={`/${parseInt(page) + 1}`}
-					disabled={parseInt(page) >= 500}
+					to={nextPage}
+					disabled={noNextPage}
 				>
 					Next
 				</Link>
@@ -68,6 +74,9 @@ export default function MoviesList() {
 				{movies
 					.filter(movie => movie.title.toLowerCase().includes(filter.toLocaleLowerCase()))
 					.map(movie => <Movie key={movie.id} config={config} movie={movie} />)
+				}
+				{window.innerWidth >= size.laptop && !noNextPage &&
+					<CTALink to={nextPage}>Next Page</CTALink>
 				}
 			</MoviesListStyles>
 		</MoviesListWrapper>
@@ -102,6 +111,12 @@ const MoviesListStyles = styled.ul`
 		width: 100%;
 		box-shadow: 1px 1px 10px rgba( 0, 0, 0, 0.4)
 	}
+	.CTALink {
+		display: none;
+		@media ${device.laptopL} {
+			display: inline-block;
+		}
+	}
 `
 const MoviesListWrapper = styled.div`
 	position: relative;
@@ -116,6 +131,7 @@ const MoviesListWrapper = styled.div`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		z-index: 1;
 	}
 	input {
 		display: block;

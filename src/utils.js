@@ -8,7 +8,7 @@ export function formatDate(date, locale, options) {
 	return new Date(date).toLocaleDateString(locale, options)
 }
 
-export function isNotOutYet(date) {
-	const today = new Date().getTime()
+export function isFutureDate(date) {
+	const today = new Date()
 	return date > today
 }

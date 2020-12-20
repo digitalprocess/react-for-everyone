@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { device } from '../viewport'
 import CTAButton from '../CTAButton'
-import { formatDate, formatRuntime, isNotOutYet } from '../utils'
+import { formatDate, formatRuntime, isFutureDate } from '../utils'
 
 const BASE_URL = `${process.env.REACT_APP_API_URL}/movie/`
 const API_KEY = `?api_key=${process.env.REACT_APP_API_KEY}`
@@ -54,6 +54,7 @@ export default function MovieDetail() {
 	if (!config.images) return null
 
 	const releaseDate = new Date(movie.release_date)
+	const isNotOutYet = isFutureDate(releaseDate)
 
 	return (
 		<MovieDetailStyles
@@ -70,9 +71,9 @@ export default function MovieDetail() {
 						src={images.base_url + images.poster_sizes[3] + movie.poster_path}
 						alt={movie.title + ' Poster'}
 					/>
-					{isNotOutYet(releaseDate) &&
+					{isNotOutYet &&
 						<h3 className="release-status">
-							Coming {formatDate(releaseDate, 'en-US', dateOptions)}
+							Coming {formatDate(releaseDate, locale, dateOptions)}
 						</h3>
 					}
 				</div>
@@ -173,7 +174,6 @@ const MovieDetailStyles = styled.div`
 			}
 		}
 	}
-
 	.poster {
 		max-width: 50%;
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -235,7 +235,7 @@ const MovieDetailStyles = styled.div`
 			top: 0;
 			left: 0;
 			color: #d12028;
-			background: #fff;
+			background: rgba(255, 255, 255, 0.8);
 			border-color: #d12028;
 			transform: rotate(-10deg);
 			width: 100%;

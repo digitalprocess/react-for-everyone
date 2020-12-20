@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import { formatDate, isNotOutYet } from '../utils'
+import { formatDate, isFutureDate } from '../utils'
 
 const locale = 'en-US'
 const dateOptions = {
@@ -13,8 +13,8 @@ const dateOptions = {
 }
 
 export default function Movie({ movie, config: { images } }) {
-	// const today = new Date().getTime()
 	const releaseDate = new Date(movie.release_date)
+	const isNotOutYet = isFutureDate(releaseDate)
 
 	return (
 		<MovieStyles>
@@ -27,7 +27,7 @@ export default function Movie({ movie, config: { images } }) {
 					:
 					<h3>{movie.title}</h3>
 				}
-				{isNotOutYet(releaseDate) &&
+				{isNotOutYet &&
 					<h5 className="release-status">
 						Coming {formatDate(releaseDate, locale, dateOptions)}
 					</h5>
@@ -59,7 +59,7 @@ const MovieStyles = styled.li`
 		top: 50%;
 		left: 0;
 		color: #d12028;
-		background: #fff;
+		background: rgba(255, 255, 255, 0.8);
 		border-color: #d12028;
 		transform: rotate(-10deg);
 		width: 100%;
